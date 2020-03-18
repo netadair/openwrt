@@ -293,6 +293,7 @@ endef
 
 $(eval $(call KernelPackage,can-vcan))
 
+
 define KernelPackage/can-xilinx-can
   TITLE:=Xilinx CAN IP
   KCONFIG:=CONFIG_CAN_XILINXCAN
@@ -307,3 +308,36 @@ define KernelPackage/can-xilinx-can/description
 endef
 
 $(eval $(call KernelPackage,can-xilinx-can))
+
+
+define KernelPackage/can-vxcan
+  TITLE:=Virtual CAN Tunnel (vxcan)
+  KCONFIG:=CONFIG_CAN_VXCAN
+  FILES:=$(LINUX_DIR)/drivers/net/can/vxcan.ko
+  AUTOLOAD:=$(call AutoProbe,vxcan)
+  $(call AddDepends/can)
+endef
+
+define KernelPackage/can-vxcan/description
+ Similar to the virtual ethernet driver veth, vxcan implements
+ a local CAN traffic tunnel between two virtual CAN network devices.
+endef
+
+$(eval $(call KernelPackage,can-vxcan))
+
+
+define KernelPackage/can-usb-gs-usb
+  TITLE:=Geschwister Schneider UG interfaces
+  KCONFIG:=CONFIG_CAN_GS_USB
+  FILES:=$(LINUX_DIR)/drivers/net/can/usb/gs_usb.ko
+  AUTOLOAD:=$(call AutoProbe,gs_usb)
+  $(call AddDepends/can,+kmod-usb-core)
+endef
+
+define KernelPackage/can-usb-gs-usb/description
+ This driver supports the Geschwister Schneider and
+ bytewerk.org candleLight USB CAN interfaces USB/CAN devices.
+endef
+
+$(eval $(call KernelPackage,can-usb-gs-usb))
+
